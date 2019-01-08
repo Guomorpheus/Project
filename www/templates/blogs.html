@@ -1,0 +1,47 @@
+{% extends '__base__.html' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block beforehead %}
+
+<script>
+</script>
+
+{% endblock %}
+{% block headerbg %}<!-- before head  -->{% endblock %}
+{% block content %}
+    <div class="uk-width-medium-8-10">
+        <div class="container">
+      <!-- Marketing Icons Section -->
+      <div class="row">
+        {% for blog in blogs %}
+            <div class="col-lg-4 mb-4">
+              <div class="card h-100 text-white {{blog.project_status}}">
+                <h4 class="card-header"><a class="text-white" href="/blog/{{ blog.id }}">{{ blog.name }}</a></h4>
+                <div class="card-body">
+                  <p class="card-text">{{ blog.summary }}</p>
+                </div>
+                <div class="card-footer">
+                  <a class="text-white" href="/blog/{{ blog.id }}">More... </a>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    </div>
+
+    <div class="uk-width-medium-2-10">
+        <div class="uk-panel uk-panel-header">
+            <h5>Recommendation</h5>
+            <ul class="uk-list uk-list-line">
+                <li><i class="uk-icon-fire"></i> <a>High Risk</a></li>
+                <li><i class="uk-icon-thumbs-o-up"></i> <a>On Schedule</a></li>
+                <li><i class="uk-icon-times"></i> <a>Delayed</a></li>
+                <li><i class="uk-icon-warning"></i> <a>Blocked</a></li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

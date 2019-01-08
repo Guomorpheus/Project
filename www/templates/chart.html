@@ -1,0 +1,51 @@
+{% extends '__base__.html' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block beforehead %}
+
+<script>
+</script>
+
+{% endblock %}
+{% block headerbg %}<!-- before head  -->{% endblock %}
+{% block content %}
+    <div class="uk-width-medium-8-10">
+        <div class="container">
+      <!-- Marketing Icons Section -->
+      <div class="row">
+        {% for finance in finances %}
+            <div class="col-lg-4 mb-4">
+              <div class="card h-100 text-white {{finance.month}}">
+                <h4 class="card-header"><a class="text-white" href="/finance/{{ finance.id }}">{{ finance.revenue }}</a></h4>
+                <div class="card-body">
+                  <p class="card-text">{{ finance.content }}</p>
+                </div>
+                <div class="card-footer">
+                  <a class="text-white" href="/finance/{{ finance.id }}">More... </a>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    </div>
+<div class="container">
+    <div class="container-fluid">
+      <!-- Icon Cards-->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa uk-icon-bar-chart-o"></i> Nova Monthly Revenue</div>
+        <div class="card-body">
+          <canvas id="myAreaChart" width="100%" height="30"></canvas>
+        </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
+    </div>
+    <script>rev={{rev}}</script>
+    <script src="/static/js/Chart.min.js"></script>
+    <script src="/static/js/sb-admin-charts.js"></script>
+</div>
+
+{% endblock %}

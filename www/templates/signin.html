@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="uk-height-1-1">
+<head>
+    <meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Innovation Center</title>
+    <link rel="stylesheet" href="/static/css/uikit.almost-flat.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/sha1.min.js"></script>
+    <script src="/static/js/uikit.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/awesome.js"></script>
+    <script>
+
+$(function() {
+    var vmAuth = new Vue({
+        el: '#vm',
+        data: {
+            email: '',
+            passwd: ''
+        },
+        methods: {
+            submit: function(event) {
+                event.preventDefault();
+                var
+                    $form = $('#vm'),
+                    email = this.email.trim().toLowerCase(),
+                    data = {
+                        email: email,
+                        passwd: this.passwd==='' ? '' : CryptoJS.SHA1(email + ':' + this.passwd).toString()
+                    };
+                $form.postJSON('/api/authenticate', data, function(err, result) {
+                    if (! err) {
+                        location.assign('/');
+                    }
+                });
+            }
+        }
+    });
+});
+
+    </script>
+</head>
+<body class="uk-height-1-1">
+    <div class="uk-vertical-align uk-text-center uk-height-1-1">
+        <div class="uk-vertical-align-middle" style="width: 320px">
+            <p><a href="/register" class="uk-icon-button"><i class="uk-icon-user"></i></a> Project Status</p>
+            <form id="vm" v-on="submit: submit" class="uk-panel uk-panel-box uk-form">
+                <div class="uk-alert uk-alert-danger uk-hidden"></div>
+                <div class="uk-form-row">
+                    <div class="uk-form-icon uk-width-1-1">
+                        <i class="uk-icon-envelope-o"></i>
+                        <input v-model="email" name="email" type="text" placeholder="邮件" maxlength="50" class="uk-width-1-1 uk-form-large">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <div class="uk-form-icon uk-width-1-1">
+                        <i class="uk-icon-lock"></i>
+                        <input v-model="passwd" name="passwd" type="password" placeholder="密码" maxlength="50" class="uk-width-1-1 uk-form-large">
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <button type="submit" class="uk-width-1-1 uk-button uk-button-primary uk-button-large"><i class="uk-icon-sign-in"></i> 登录</button>
+                    <p>Do not have an account? <a href="/register">Create an account right now!</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+<iframe
+  width="600"
+  height="400"
+  seamless
+  frameBorder="0"
+  scrolling="no"
+  src="http://pactdata.com/pactdata/explore/?form_data=%7B%22datasource%22%3A%2214__table%22%2C%22viz_type%22%3A%22dist_bar%22%2C%22slice_id%22%3A81%2C%22url_params%22%3A%7B%7D%2C%22granularity_sqla%22%3Anull%2C%22time_grain_sqla%22%3A%22P1D%22%2C%22time_range%22%3A%22No+filter%22%2C%22metrics%22%3A%5B%22count%22%5D%2C%22adhoc_filters%22%3A%5B%5D%2C%22groupby%22%3A%5B%22Project%22%5D%2C%22columns%22%3A%5B%5D%2C%22row_limit%22%3A10000%2C%22contribution%22%3Afalse%2C%22color_scheme%22%3A%22bnbColors%22%2C%22show_legend%22%3Atrue%2C%22show_bar_value%22%3Atrue%2C%22bar_stacked%22%3Afalse%2C%22order_bars%22%3Afalse%2C%22y_axis_format%22%3A%22.3s%22%2C%22y_axis_label%22%3A%22%22%2C%22show_controls%22%3Afalse%2C%22x_axis_label%22%3A%22%22%2C%22bottom_margin%22%3A%22auto%22%2C%22x_ticks_layout%22%3A%22auto%22%2C%22reduce_x_ticks%22%3Afalse%7D&standalone=true&height=400"
+>
+</iframe>
+</body>
+</html>

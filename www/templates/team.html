@@ -1,0 +1,140 @@
+{% extends '__base__.html' %}
+
+{% block title %}Team{% endblock %}
+
+{% block beforehead %}
+
+<script>
+
+function initVM(data) {
+    var vm = new Vue({
+        el: '#vm',
+        data: {
+            resources: data.resources,
+            page: data.page
+        },
+        methods: {
+            edit_resource: function (resource) {
+                location.assign('/resources/edit?id=' + resource.id);
+            },
+            delete_resource: function (resource) {
+                if (confirm('Confirm to delete “' + resource.name + '”? Cannot be recovered after delete!')) {
+                    postJSON('/api/resources/' + resource.id + '/delete', function (err, r) {
+                        if (err) {
+                            return alert(err.message || err.error || err);
+                        }
+                        refresh();
+                    });
+                }
+            }
+        }
+    });
+    $('#vm').show();
+}
+
+$(function() {
+    getJSON('/api/resources', {
+        page: {{ page_index }}
+    }, function (err, results) {
+        if (err) {
+            return fatal(err);
+        }
+        $('#loading').hide();
+        initVM(results);
+    });
+});
+
+</script>
+
+{% endblock %}
+{% block headerbg %}<!-- before head  -->{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+      <!-- Team Members Row -->
+      <div class="row">
+        <div class="col-lg-4 col-sm-6 text-center mb-4">
+          <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+          <h5>Alex Yang
+          </h5>
+          <p> Skill set: Automation, RnD, Testing</p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center mb-4">
+          <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+          <h5>Morpheus Guo
+          </h5>
+          <p> Skill set: Automation, RnD, Testing, Management</p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center mb-4">
+          <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+          <h5>Changsong Li
+          </h5>
+          <p> Skill set: Automation, RnD</p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center mb-4">
+          <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+          <h5>Star Liu
+          </h5>
+          <p> Skill set: Testing</p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center mb-4">
+          <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+          <h5>Candy Chen
+          </h5>
+          <p> Skill set: RnD</p>
+        </div>
+        <div class="col-lg-4 col-sm-6 text-center mb-4">
+          <img class="rounded-circle img-fluid d-block mx-auto" src="http://placehold.it/100x100" alt="">
+          <h3>Weifeng Liu
+          </h3>
+          <p> Skill set: RnD, Architect</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="error" class="uk-width-1-1">
+    </div>
+
+    <div id="loading" class="uk-width-1-1 uk-text-center">
+        <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> Loading...</span>
+    </div>
+
+    <div id="vm" class="uk-width-1-1">
+
+        <table class="uk-table uk-table-hover">
+            <thead>
+                <tr>
+                    <th class="uk-width-2-10">Name</th>
+                    <th class="uk-width-2-10">Employee ID</th>
+                    <th class="uk-width-3-10">Email</th>
+                    <th class="uk-width-2-10">Create At</th>
+                    <th class="uk-width-1-10">Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-repeat="resource: resources" >
+                    <td>
+                        <a v-text="resource.name"></a>
+                    </td>
+                    <td>
+                        <a v-text="resource.employee_id"></a>
+                    </td>
+                    <td>
+                        <a v-text="resource.email"></a>
+                    </td>
+                    <td>
+                        <span v-text="resource.created_at.toDateTime()"></span>
+                    </td>
+                    <td>
+                        <a href="#0" v-on="click: edit_resource(resource)"><i class="uk-icon-edit"></i>
+                        <a href="#0" v-on="click: delete_resource(resource)"><i class="uk-icon-trash-o"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/create_employee" class="uk-button uk-button-primary"><i class="uk-icon-plus"></i> New</a>
+    </div>
+
+{% endblock %}

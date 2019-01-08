@@ -1,0 +1,97 @@
+{% extends '__base__.html' %} {% block title %}Add Member{% endblock %} {% block beforehead %}
+
+<script>
+
+    var
+        ID = '{{ id }}',
+        action = '{{ action }}';
+
+    function initVM(resource) {
+        var vm = new Vue({
+            el: '#vm',
+            data: resource,
+            methods: {
+                submit: function (event) {
+                    event.preventDefault();
+                    var $form = $('#vm').find('form');
+                    $form.postJSON(action, this.$data, function (err, r) {
+                        if (err) {
+                            $form.showFormError(err);
+                        }
+                        else {
+                            return location.assign('/team');
+                        }
+                    });
+                }
+            }
+        });
+        $('#vm').show();
+    }
+
+    $(function () {
+        if (ID) {
+            getJSON('/api/resources/' + ID, function (err, resource) {
+                if (err) {
+                    return fatal(err);
+                }
+                $('#loading').hide();
+                initVM(resource);
+            });
+        }
+        else {
+            $('#loading').hide();
+            initVM({
+                name: '',
+                summary: '',
+                content: ''
+            });
+        }
+    });
+
+</script> {% endblock %}
+
+{% block headerbg %}<!-- before head  -->{% endblock %}
+
+{% block content %}
+
+<div id="error" class="uk-width-1-1">
+</div>
+
+<div id="loading" class="uk-width-1-1 uk-text-center">
+    <span>
+        <i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> Loading...</span>
+</div>
+
+<div id="vm" class="uk-width-2-3">
+    <form v-on="submit: submit" class="uk-form uk-form-stacked">
+        <div class="uk-alert uk-alert-danger uk-hidden"></div>
+        <div class="uk-form-row">
+            <div class="uk-form-controls">
+                <input v-model="name" name="name" type="text" placeholder="name" class="uk-width-1-1">
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <div class="uk-form-controls">
+                <input v-model="employee_id" name="employee_id" placeholder="Employee ID" class="uk-width-1-1" style="resize:none;"></input>
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <div class="uk-form-controls">
+                <input v-model="email" name="email" placeholder="Email" class="uk-width-1-1" style="resize:none;"></input>
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <div class="uk-form-controls">
+                <textarea v-model="introduce" rows="16" name="introduce" placeholder="Introduce" class="uk-width-1-1" style="resize:none;"></textarea>
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <button type="submit" class="uk-button uk-button-primary">
+                <i class="uk-icon-save"></i> Save</button>
+            <a href="/team" class="uk-button">
+                <i class="uk-icon-times"></i> Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
